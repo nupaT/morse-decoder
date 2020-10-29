@@ -41,38 +41,35 @@ function decode(expr) {
     let result = '';
     let str = expr.match(/.{1,10}/g);
     for(let i = 0; i < str.length; i++){
+      if(str[i] == '**********') str[i] = '**';
       let symb = str[i].match(/.{1,2}/g);
       for(let n = 0; n < symb.length; n++){
-      alert('symb ' + symb[n]);
-      alert ('n ' + n);
 
-      switch (str[n]){
+        if(n) {
+          switch (symb[n]){
 
-        case '00':
-          break;
+            case '00':
+              break;
 
-        case '10':
-          result += '.';
-          break;
+            case '10':
+              result += '.';
+              break;
 
-        case '11':
-          result += '-';
-          break;
+            case '11':
+              result += '-';
+              break;
 
-        default:
-        result += ' ';
-        break;
-
-        //alert(result);
-        }
+            default:
+            result += ' ';
+            break;
+          }
+        } else result += ' '
       }
-      alert(result);  
-     // }
     }
-    
+    result = result.split('  ').map(a => a.split(' ').map(b => MORSE_TABLE[b]).join()).join(' ').replace(/(,)/g, '');
 
 
-    return str;
+    return result;
 }
 
 module.exports = {
