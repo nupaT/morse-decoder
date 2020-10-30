@@ -39,13 +39,13 @@ const MORSE_TABLE = {
 
 function decode(expr) {
     let result = '';
-    let str = expr.match(/.{1,10}/g);
-    for(let i = 0; i < str.length; i++){
-      if(str[i] == '**********') str[i] = '**';
-      let symb = str[i].match(/.{1,2}/g);
-      for(let n = 0; n < symb.length; n++){
+    let str = expr.match(/.{1,10}/g);             //cut a string of 10 elements
+    for(let i = 0; i < str.length; i++){          //each of the elemetns...
+      if(str[i] == '**********') str[i] = '**';   //if element == ********* replace by "space"
+      let symb = str[i].match(/.{1,2}/g);         //cut a element of 2 symbol
+      for(let n = 0; n < symb.length; n++){       //for each 2symbol check
 
-        if(n) {
+        if(n < symb.length) {
           switch (symb[n]){
 
             case '00':
@@ -65,9 +65,13 @@ function decode(expr) {
           }
         } else result += ' '
       }
+      result += ' ';
     }
-    result = result.split('  ').map(a => a.split(' ').map(b => MORSE_TABLE[b]).join()).join(' ').replace(/(,)/g, '');
-
+    result = result.split('  ')                 //split all by double spaces
+                    .map(a => a.split(' ')      //split by other spaces
+                    .map(b => MORSE_TABLE[b])   //replace dot-dash to letter or number
+                    .join()).join(' ')          //join letter and words
+                    .replace(/(,)/g, '');       //delete ","
 
     return result;
 }
